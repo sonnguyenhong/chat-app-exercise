@@ -1,8 +1,12 @@
 import React, { useState } from 'react';
 import { Button, Row, Col, Form } from 'react-bootstrap';
-import { Link } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
+
+import userService from '../services/user.service';
 
 function Register() {
+    const history = useNavigate();
+
     const [variables, setVariables] = useState({
         username: '',
         password: '',
@@ -11,8 +15,10 @@ function Register() {
 
     const [errors, setErrors] = useState({});
 
-    const submitRegisterForm = (e) => {
+    const submitRegisterForm = async (e) => {
         e.preventDefault();
+        await userService.register(variables);
+        history('/login');
     };
 
     return (
