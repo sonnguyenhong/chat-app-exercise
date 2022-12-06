@@ -6,7 +6,6 @@ import userService from '../services/user.service';
 
 function Register() {
     const history = useNavigate();
-
     const [variables, setVariables] = useState({
         username: '',
         password: '',
@@ -14,17 +13,23 @@ function Register() {
     });
 
     const [errors, setErrors] = useState({});
+    const [error, setError] = useState(null);
 
     const submitRegisterForm = async (e) => {
         e.preventDefault();
-        await userService.register(variables);
-        history('/login');
+        try {
+            const response = await userService.register(variables);
+            history('/login');
+        } catch (err) {
+            setError(err.message);
+        }
     };
 
     return (
         <Row className="bg-white py-5 justify-content-center">
             <Col sm={8} md={6} lg={4}>
                 <h1 className="text-center">Register</h1>
+                <p className="text-center text-danger">{error}</p>
                 <Form onSubmit={submitRegisterForm}>
                     <Form.Group className="mb-3" controlId="formBasicUsername">
                         <Form.Label className={errors.username && 'text-danger'}>
